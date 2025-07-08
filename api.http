@@ -1,9 +1,33 @@
+### insert
 POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "email": "test-{{$timestamp}}@example.com",
-  "name": "Tedsal",
-  "phone": "63901234557",
-  "address": "Oz"
+  "email": "basil-{{$timestamp}}@example.com",
+  "name": "basil",
+  "phone": "63901234559",
+  "address": "Oroquieta"
+}
+
+### select with filtering
+GET http://localhost:3000/users?id=843d3ce3-8252-4888-8acd-773273bed3de
+
+### GET all users
+GET http://localhost:3000/users
+
+// Delete
+### delete permamently from database
+DELETE http://localhost:3000/users/aa20839e-ff91-4366-a4d3-879fc924c86c
+Content-Type: application/json
+
+### PUT update an existing user
+PUT http://localhost:3000/users/843d3ce3-8252-4888-8acd-773273bed3de
+Content-Type: application/json
+
+{
+  "id": "843d3ce3-8252-4888-8acd-773273bed3de",
+  "email": "aquit1.reynaldo@gmail.com",
+  "name": "updated Rrenzoy",
+  "phone": "63999888777",
+  "address": "Ozamis City"
 }
