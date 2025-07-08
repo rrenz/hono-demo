@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  hono-app:
+    build:
+      context: . # Path to your Hono app directory containing Dockerfile
+      dockerfile: Dockerfile
+    container_name: hono_app_container
+    ports:
+      - "3001:3000" # Map host port 3001 to container port 3000
+    environment:
+      # Environment variables for the Hono app to connect to PostgreSQL
+      DB_HOST: postgres_db # Service name of the PostgreSQL container
+      DB_PORT: 5432
+      DB_USER: hono_user
+      DB_PASSWORD: hono_password
+      DB_NAME: hono_database
+      TEST_ENV_VAR: "Hello from Docker Compose!" # Example environment variable
+    depends_on:
+      - postgres_db # Ensure postgres_db starts before hono-app
+    networks:
+      - hono_network
+
+  postgres_db:
+    image: postgres:16-alpine # Use a lightweight PostgreSQL image
+    container_name: postgres_db_container
+    environment:
+      POSTGRES_DB: hono_database
+      POSTGRES_USER: hono_user
+      POSTGRES_PASSWORD: hono_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistent data volume
+    ports:
+      - "5432:5432" # Expose PostgreSQL port (optional, good for direct connection)
+    networks:
+      - hono_network
+
+  pgadmin:
+    image: dpage/pgadmin4:8.9 # Use pgAdmin 4 image
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin_password
+      PGADMIN_LISTEN_PORT: 80 # pgAdmin listens on port 80 inside the container
+    ports:
+      - "8080:80" # Map host port 8080 to container port 80 for pgAdmin UI
+    depends_on:
+      - postgres_db # Ensure postgres_db is running before pgAdmin
+    networks:
+      - hono_network
+
+# Define volumes for persistent data
+volumes:
+  postgres_data: # This volume will store PostgreSQL data
+
+# Define a custom network for services to communicate
+networks:
+  hono_network:
+    driver: bridge

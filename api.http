@@ -1,0 +1,9 @@
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "email": "test-{{$timestamp}}@example.com",
+  "name": "Tedsal",
+  "phone": "63901234557",
+  "address": "Oz"
+}
